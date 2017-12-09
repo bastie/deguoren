@@ -1,4 +1,4 @@
-Copyright 2010, 2017 Sebastian Ritter
+Copyright 2017 Sebastian Ritter
 
 Lizenziert unter der EUPL, nur Version 1.1 ("Lizenz");
 
