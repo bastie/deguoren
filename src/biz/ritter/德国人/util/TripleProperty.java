@@ -35,38 +35,73 @@ package biz.ritter.德国人.util;
  */
 class TripleProperty {
 
+  /**
+   * Der Schlüssel
+   */
   private String key;
+  /**
+   * Der erste zugeordnete Wert
+   */
   private String firstValue;
+  /**
+   * Der zweite zugeordnete Wert
+   */
   private String secondValue;
   
+  /**
+   * Erzeugt eine neue TripleProperty anhand der Übergabe
+   * @param keyValueValue Array mit dem Schlüssel und zwei zuzuorndenen Werten
+   */
   public TripleProperty (String... keyValueValue) {
     this.setProperty(keyValueValue);
   }
 
+  /**
+   * Setzt eine Property
+   * @param keyValueValue Array mit dem Schlüssel und zwei zuzuorndenen Werten
+   */
   public void setProperty(String... keyValueValue) {
     if (null != keyValueValue) {
       for (int i = 0; i < keyValueValue.length; i++) {
         switch (i) {
-        case 0: key = keyValueValue [0]; break;
-        case 1: firstValue = keyValueValue [1]; break;
-        case 2: secondValue = keyValueValue [2]; break;
+        case 0: key = keyValueValue [0].intern(); break;
+        case 1: firstValue = keyValueValue [1].intern(); break;
+        case 2: secondValue = keyValueValue [2].intern(); break;
         default: // ignore
           break;
         }
       }
     } 
   }
+  /**
+   * Setzt eine Property
+   * @param newKey Schlüssel
+   * @param newFirstValue erster Wert
+   * @param newSecondValue zweiter Wert
+   */
   public void setProperty(String newKey, String newFirstValue, String newSecondValue) {
     this.key = newKey.intern();
     this.firstValue = newFirstValue.intern();
     this.secondValue = newSecondValue.intern();
   }
+  /**
+   * Liefert den ersten Wert der Property
+   * @return Wert Nummer 1
+   */
   public String getFirstValue () {
     return this.firstValue;
   }
+  /**
+   * Liefert den zweiten Wert der Property
+   * @return Wert Nummer 2
+   */
   public String getSecondValue() {
     return this.secondValue;
   }
+  /**
+   * Liefert den Schlüssel
+   * @return
+   */
   public String getKey () {
     return this.key;
   }
