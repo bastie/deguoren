@@ -19,7 +19,10 @@
  */
 package biz.ritter.德国人.util;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -30,7 +33,7 @@ import java.util.Iterator;
  * Zuordnung
  * 
  * @author Sͬeͥbͭaͭsͤtͬian
- *
+ * @version 0.2
  */
 public class TripleProperties {
 
@@ -40,13 +43,41 @@ public class TripleProperties {
   private HashMap<String, TripleProperty> propertyContainer = new HashMap<String, TripleProperty>();
   
   /**
-   * Lädt (irgendwann) entsprechende Property-Dateien
-   * @param ignored irgendwann mal auszuwertender InputStream
+   * Lädt entsprechende Property-Dateien
+   * @param newInput auszuwertender InputStream
+   * @throws IOException wenn der InputStream nicht existiert
    */
-  public void load (InputStream ignored) {
-    this.put("德国人", "dé guó rén", "Deutscher")
-    .put("人", "rén", "Mensch")
-    .list(System.out);
+  public void load (InputStream newInput) throws IOException {
+    try {
+      BufferedReader br = new BufferedReader(new InputStreamReader(newInput, "utf-8"));
+  
+      final char COMMENT_LINE_IDENTIFIER = '#';
+      String nextLine = null;
+      while (null != (nextLine = br.readLine())) {
+        nextLine = nextLine.trim();
+        if (nextLine.length()>0) {
+          if (nextLine.charAt(0) != COMMENT_LINE_IDENTIFIER) {
+            int firstEqualChar = nextLine.indexOf("=");
+            int secondEqualChar = nextLine.indexOf("=", firstEqualChar+1);
+            String key = nextLine.substring(0,firstEqualChar++).trim();
+            String firstValue = nextLine.substring(firstEqualChar, secondEqualChar++).trim();
+            String secondValue = nextLine.substring(secondEqualChar).trim();
+            
+            this.put(key, firstValue, secondValue);
+          }
+        }
+      }
+    }
+    catch (Exception throwAsIOException) {
+      throw new IOException(throwAsIOException);
+    }
+  }
+  
+  /**
+   * Leert die Properties
+   */
+  public void clear () {
+    this.propertyContainer = new HashMap<String, TripleProperty>();
   }
   
   /**

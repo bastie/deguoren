@@ -21,6 +21,8 @@ package biz.ritter.德国人;
 
 import biz.ritter.德国人.util.TripleProperties;
 
+import java.io.InputStream;
+
 /**
  * Startklasse für die Anwendung.
  * 
@@ -68,6 +70,12 @@ public class 德国人 implements Runnable {
    */
   public void run () {
     TripleProperties props = new TripleProperties();
-    props.load(null);
+    try {
+      props.load(this.getClass().getResourceAsStream("/biz/ritter/res/中文字/Sammlung.properties"));
+      props.list(System.out);
+    }
+    catch(Throwable notSoGood) {
+      notSoGood.printStackTrace();
+    }
   }
 }
