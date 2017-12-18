@@ -19,7 +19,9 @@
  */
 package biz.ritter.德国人;
 
+import biz.ritter.德国人.bo.VocabularyListRandomizer;
 import biz.ritter.德国人.util.TripleProperties;
+import biz.ritter.德国人.util.TripleProperty;
 
 import java.io.InputStream;
 
@@ -69,10 +71,19 @@ public class 德国人 implements Runnable {
    * @see #starteAnwendung()
    */
   public void run () {
-    TripleProperties props = new TripleProperties();
+    TripleProperties<String> props = new TripleProperties<String>();
     try {
       props.load(this.getClass().getResourceAsStream("/biz/ritter/res/中文字/Sammlung.properties"));
       props.list(System.out);
+      
+      
+      System.out.println("==============");
+      
+      VocabularyListRandomizer<String> randomizer = new VocabularyListRandomizer<>();
+      TripleProperty[] property = randomizer.get(10, props);
+      for (int i = 0; i < property.length; i++) {
+        System.out.println(property[i]);
+      }
     }
     catch(Throwable notSoGood) {
       notSoGood.printStackTrace();

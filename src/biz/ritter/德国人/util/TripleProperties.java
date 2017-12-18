@@ -27,20 +27,21 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Völlig bescheuerte Implementation eines Dreierpakets an Schlüssel-Wert-Wert 
  * Zuordnung
  * 
  * @author Sͬeͥbͭaͭsͤtͬian
- * @version 0.2
+ * @version 0.3
  */
-public class TripleProperties {
+public class TripleProperties<E> {
 
   /**
    * Interne Verwaltung
    */
-  private HashMap<String, TripleProperty> propertyContainer = new HashMap<String, TripleProperty>();
+  private HashMap<E, TripleProperty> propertyContainer = new HashMap<E, TripleProperty>();
   
   /**
    * Lädt entsprechende Property-Dateien
@@ -77,7 +78,15 @@ public class TripleProperties {
    * Leert die Properties
    */
   public void clear () {
-    this.propertyContainer = new HashMap<String, TripleProperty>();
+    this.propertyContainer = new HashMap<E, TripleProperty>();
+  }
+  
+  /**
+   * Eine Sammlung der Schlüsselwerte
+   * @return Schlüsselwerte
+   */
+  public Set<E> keySet () {
+    return this.propertyContainer.keySet();
   }
   
   /**
@@ -86,9 +95,19 @@ public class TripleProperties {
    * @return TripleProperties die neu gefüllte Liste
    * @pattern Fluent
    */
-  protected TripleProperties put (TripleProperty newProperty) {
-    this.propertyContainer.put(newProperty.getKey(), newProperty);
+  protected TripleProperties<E> put (TripleProperty newProperty) {
+    this.propertyContainer.put((E)newProperty.getKey(), newProperty); //FIXME - Casting nach E ist grenzwertig
     return this;
+  }
+  
+  /**
+   * Liefert ein TripleProperty Objekt, welches unter dem übergebenen
+   * Schlüssel gespeichert ist.
+   * @param key Schlüssel
+   * @return TripleProperty Objekt
+   */
+  public TripleProperty get (E key) {
+    return this.propertyContainer.get(key);
   }
   
   /**
@@ -99,7 +118,7 @@ public class TripleProperties {
    * @return TripleProperties die neue gefüllte Liste
    * @pattern Fluent
    */
-  public TripleProperties put (String key, String firstValue, String secondValue) {
+  public TripleProperties<E> put (String key, String firstValue, String secondValue) {
     this.put(new TripleProperty(new String [] {key,firstValue,secondValue}));
     return this;
   }
@@ -118,18 +137,13 @@ public class TripleProperties {
    * @return TripleProperties
    * @pattern Fluent
    */
-  public TripleProperties list (PrintStream outputStream) {
+  public TripleProperties<E> list (PrintStream outputStream) {
     outputStream.println("-- listing properties --");
-    Iterator<String> keyIterator = this.propertyContainer.keySet().iterator();
+    Iterator<E> keyIterator = this.propertyContainer.keySet().iterator();
     while (keyIterator.hasNext()) {
-      String key = keyIterator.next();
-      String firstValue = this.propertyContainer.get(key).getFirstValue();
-      String secondValue = this.propertyContainer.get(key).getSecondValue();
-      String propertyPrintLine = key+"="+firstValue+"="+secondValue;
-      if (MAX_LIST_PRINT_LENGTH < propertyPrintLine.length()) {
-        propertyPrintLine = propertyPrintLine.substring(0,LIST_PRINT_TEXT_LENGTH) + "...";
-      }
-      outputStream.println(propertyPrintLine);
+      E key = keyIterator.next();
+      TripleProperty property = this.propertyContainer.get(key);
+      outputStream.println(property.toString());
     }
     return this;
   }
@@ -139,18 +153,13 @@ public class TripleProperties {
    * @return TripleProperties
    * @pattern Fluent
    */
-  public TripleProperties list (PrintWriter writer) {
+  public TripleProperties<E> list (PrintWriter writer) {
     writer.println("-- listing properties --");
-    Iterator<String> keyIterator = this.propertyContainer.keySet().iterator();
+    Iterator<E> keyIterator = this.propertyContainer.keySet().iterator();
     while (keyIterator.hasNext()) {
-      String key = keyIterator.next();
-      String firstValue = this.propertyContainer.get(key).getFirstValue();
-      String secondValue = this.propertyContainer.get(key).getSecondValue();
-      String propertyPrintLine = key+"="+firstValue+"="+secondValue;
-      if (MAX_LIST_PRINT_LENGTH < propertyPrintLine.length()) {
-        propertyPrintLine = propertyPrintLine.substring(0,LIST_PRINT_TEXT_LENGTH) + "...";
-      }
-      writer.println(propertyPrintLine);
+      E key = keyIterator.next();
+      TripleProperty property = this.propertyContainer.get(key);
+      writer.println(property.toString());
     }
     return this;
   }

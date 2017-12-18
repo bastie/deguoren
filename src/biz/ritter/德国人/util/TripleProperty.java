@@ -31,9 +31,9 @@ package biz.ritter.德国人.util;
  * </table>
  * 
  * @author Sͬeͥbͭaͭsͤtͬian
- *
+ * @version 2.0 (Sichtbarkeit public)
  */
-class TripleProperty {
+public class TripleProperty {
 
   /**
    * Der Schlüssel
@@ -104,5 +104,25 @@ class TripleProperty {
    */
   public String getKey () {
     return this.key;
+  }
+
+  /**
+   * Interne Konstante wie breit die Ausgabe sein soll.
+   */
+  private final int MAX_LIST_PRINT_LENGTH = 79;
+  /**
+   * Interne Konstante, wo die Ausgabe abgebrochen werden soll
+   */
+  private final int LIST_PRINT_TEXT_LENGTH = MAX_LIST_PRINT_LENGTH-"...".length();
+  
+  @Override
+  public String toString() {
+    String firstValue = this.getFirstValue();
+    String secondValue = this.getSecondValue();
+    String propertyPrintLine = key+"="+firstValue+"="+secondValue;
+    if (MAX_LIST_PRINT_LENGTH < propertyPrintLine.length()) {
+      propertyPrintLine = propertyPrintLine.substring(0,LIST_PRINT_TEXT_LENGTH) + "...";
+    }
+    return propertyPrintLine;
   }
 }
